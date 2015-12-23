@@ -1,11 +1,13 @@
 namespace Snake {
 	public class Point : Object {
-		public double x {set; get;}
-		public double y {set; get;}
-		public char symb {set; get;}
+		public double x;
+		public double y;
+		public char symb;
 
-		public Point () {
-
+		public Point (double _x, double _y, char _symb) {
+			x = _x;
+			y = _y;
+			symb = _symb;
 		}
 		public void draw (Cairo.Context cr) {
 			cr.save ();
