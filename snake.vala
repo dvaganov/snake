@@ -9,25 +9,26 @@ namespace Snake {
 			window.set_default_size (400, 400);
 			window.title = "Snake";
 
+			var p1 = new Point ();
+			p1.x = 10;
+			p1.y = 30;
+			p1.symb = '*';
+
+			var p2 = new Point ();
+			p2.x = 40;
+			p2.y = 50;
+			p2.symb = '#';
+
 			var main_scene = new Gtk.DrawingArea ();
 			main_scene.expand = true;
 			main_scene.draw.connect((cr) => {
-				this.draw(cr, 10, 30, "*");
-				this.draw(cr, 40, 50, "#");
+				p1.draw (cr);
+				p2.draw (cr);
 				return true;
 			});
 
 			window.add (main_scene);
 			window.show_all ();
-		}
-		private void draw(Cairo.Context cr, double x, double y, string simb) {
-			cr.save();
-			cr.set_source_rgb (0.1, 0.1, 0.1);
-			cr.select_font_face ("Adventure", Cairo.FontSlant.NORMAL, Cairo.FontWeight.BOLD);
-			cr.set_font_size (20);
-			cr.move_to(x, y);
-			cr.show_text(simb);
-			cr.restore();
 		}
 		public static int main(string[] args) {
 			var app = new Snake.Application ();

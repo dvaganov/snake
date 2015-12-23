@@ -1,2 +1,2 @@
-all: snake.vala
-	valac --pkg gtk+-3.0 snake.vala
+all: snake.vala point.vala
+	valac --pkg gtk+-3.0 snake.vala point.vala
