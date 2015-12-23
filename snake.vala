@@ -9,23 +9,18 @@ namespace Snake {
 			window.set_default_size (400, 400);
 			window.title = "Snake";
 
-			var c_list = new GenericArray<char?> ();
-			c_list.add ('*');
-			c_list.add ('#');
-			c_list.add ('+');
-
 			var p1 = new Point (10, 30, '*');
 			var p2 = new Point (40, 50, '#');
-
-			var p_list = new GenericArray<Point?> ();
-			p_list.add (p1);
-			p_list.add (p2);
+			var h_line = new HorizontalLine (50, 100, 100, '+');
+			var v_line = new VerticalLine (100, 50, 100, '+');
 
 			var main_scene = new Gtk.DrawingArea ();
 			main_scene.expand = true;
 			main_scene.draw.connect((cr) => {
-				p_list[0].draw (cr);
-				p_list[1].draw (cr);
+				p1.draw (cr);
+				p2.draw (cr);
+				h_line.draw (cr);
+				v_line.draw (cr);
 				return true;
 			});
 
