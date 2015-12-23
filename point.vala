@@ -4,8 +4,10 @@ namespace Snake {
 		public double y;
 		public char symb;
 
-		public Point () {
-
+		public Point (double _x, double _y, char _symb) {
+			x = _x;
+			y = _y;
+			symb = _symb;
 		}
 		public void draw (Cairo.Context cr) {
 			cr.save ();

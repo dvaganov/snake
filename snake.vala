@@ -9,15 +9,8 @@ namespace Snake {
 			window.set_default_size (400, 400);
 			window.title = "Snake";
 
-			var p1 = new Point ();
-			p1.x = 10;
-			p1.y = 30;
-			p1.symb = '*';
-
-			var p2 = new Point ();
-			p2.x = 40;
-			p2.y = 50;
-			p2.symb = '#';
+			var p1 = new Point (10, 30, '*');
+			var p2 = new Point (40, 50, '#');
 
 			var main_scene = new Gtk.DrawingArea ();
 			main_scene.expand = true;
