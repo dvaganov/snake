@@ -1,8 +1,8 @@
 namespace Snake {
 	public class Point : Object {
-		public double x {set; get;}
-		public double y {set; get;}
-		public char symb {set; get;}
+		public double x;
+		public double y;
+		public char symb;
 
 		public Point () {
 
