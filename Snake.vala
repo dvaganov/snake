@@ -17,5 +17,21 @@ namespace Snake {
 			head.move (1, direction);
 			p_list.add (head);
 		}
+		public void key_handle (Gdk.EventKey key) {
+			switch (key.keyval) {
+				case Gdk.Key.Right:
+					direction = Direction.RIGHT;
+					break;
+				case Gdk.Key.Left:
+					direction = Direction.LEFT;
+					break;
+				case Gdk.Key.Up:
+					direction = Direction.UP;
+					break;
+				case Gdk.Key.Down:
+					direction = Direction.DOWN;
+					break;
+			}
+		}
 	}
 }

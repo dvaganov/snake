@@ -18,26 +18,26 @@ namespace Snake {
 
 			var main_scene = new Gtk.DrawingArea ();
 			main_scene.expand = true;
+			main_scene.set_events (Gdk.EventMask.KEY_PRESS_MASK);
 			main_scene.draw.connect((cr) => {
 				top_line.draw (cr);
 				right_line.draw (cr);
 				bottom_line.draw (cr);
 				left_line.draw (cr);
 				snake.draw (cr);
-				return true;
-			});
-
-			var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-			box.pack_start (main_scene);
-
-			var button = new Gtk.Button.with_label ("Move!");
-			button.clicked.connect (() => {
+				Thread.usleep (100000);
 				snake.move ();
 				main_scene.queue_draw ();
+				return true;
 			});
-			box.pack_start (button, false, false);
+			window.key_press_event.connect ((key) => {
+				snake.key_handle (key);
+				snake.move ();
+				main_scene.queue_draw ();
+				return false;
+			});
 
-			window.add (box);
+			window.add (main_scene);
 			window.show_all ();
 		}
 		public static int main(string[] args) {
