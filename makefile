@@ -3,7 +3,9 @@ Application.vala \
 Point.vala \
 HorizontalLine.vala \
 VerticalLine.vala \
-Figure.vala
+Figure.vala \
+Snake.vala \
+Direction.vala
 
 PKG = --pkg gtk+-3.0
 all: snake

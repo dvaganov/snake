@@ -9,18 +9,18 @@ namespace Snake {
 			window.set_default_size (550, 550);
 			window.title = "Snake";
 
-			var p1 = new Point (10, 30, '*');
-			var p2 = new Point (40, 50, '#');
-			var top_line = new HorizontalLine (50, 500, 50, '+');
-			var right_line = new VerticalLine (500, 50, 500, '+');
-			var bottom_line = new HorizontalLine (50, 500, 500, '+');
-			var left_line = new VerticalLine (50, 50, 500, '+');
+			var p1 = new Point (40, 50, '*');
+			var snake = new Snake (p1, 4, Direction.RIGHT);
+			var top_line = new HorizontalLine (10, 500, 10, '+');
+			var right_line = new VerticalLine (500, 10, 500, '+');
+			var bottom_line = new HorizontalLine (10, 500, 500, '+');
+			var left_line = new VerticalLine (10, 10, 500, '+');
 
 			var main_scene = new Gtk.DrawingArea ();
 			main_scene.expand = true;
 			main_scene.draw.connect((cr) => {
-				p1.draw (cr);
-				p2.draw (cr);
+				//p1.draw (cr);
+				snake.draw (cr);
 				top_line.draw (cr);
 				right_line.draw (cr);
 				bottom_line.draw (cr);
@@ -32,7 +32,7 @@ namespace Snake {
 			window.show_all ();
 		}
 		public static int main(string[] args) {
-			var app = new Snake.Application ();
+			var app = new Application ();
 			return app.run(args);
 		}
 	}
