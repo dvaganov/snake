@@ -32,7 +32,6 @@ namespace Snake {
 			});
 			window.key_press_event.connect ((key) => {
 				snake.key_handle (key);
-				snake.move ();
 				main_scene.queue_draw ();
 				return false;
 			});
