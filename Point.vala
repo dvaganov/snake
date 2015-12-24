@@ -40,5 +40,14 @@ namespace Snake {
 					break;
 			}
 		}
+		public bool is_match (Point p) {
+			bool is_match;
+			if (this.x == p.x && this.y == p.y) {
+				is_match = true;
+			} else {
+				is_match = false;
+			}
+			return is_match;
+		}
 	}
 }

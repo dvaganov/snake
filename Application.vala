@@ -9,24 +9,36 @@ namespace Snake {
 			window.set_default_size (550, 550);
 			window.title = "Snake";
 
-			var p1 = new Point (40, 50, '*');
-			var snake = new Snake (p1, 4, Direction.RIGHT);
 			var top_line = new HorizontalLine (10, 500, 10, '+');
 			var right_line = new VerticalLine (500, 10, 500, '+');
 			var bottom_line = new HorizontalLine (10, 500, 500, '+');
 			var left_line = new VerticalLine (10, 10, 500, '+');
 
+			var tail = new Point (40, 50, '*');
+			var snake = new Snake (tail, 4, Direction.RIGHT);
+
+			var food_creator = new FoodCreator (550, 550, '$');
+			var food = food_creator.create ();
+
 			var main_scene = new Gtk.DrawingArea ();
 			main_scene.expand = true;
 			main_scene.set_events (Gdk.EventMask.KEY_PRESS_MASK);
 			main_scene.draw.connect((cr) => {
+				// Draw border
 				top_line.draw (cr);
 				right_line.draw (cr);
 				bottom_line.draw (cr);
 				left_line.draw (cr);
+				// Draw food
+				if (snake.eat_food (food)) {
+					food = food_creator.create ();
+				}
+				food.draw (cr);
+				// Draw snake
 				snake.draw (cr);
-				Thread.usleep (100000);
+				// Make it moves FIXME redraw only snake
 				snake.move ();
+				Thread.usleep (100000);
 				main_scene.queue_draw ();
 				return true;
 			});

@@ -17,6 +17,19 @@ namespace Snake {
 			head.move (1, direction);
 			p_list.add (head);
 		}
+		public bool eat_food (Point food) {
+			bool is_eaten;
+			var head = p_list[p_list.length - 1];
+			if (head.is_match (food)) {
+				food.symb = head.symb;
+				food.move (1, direction);
+				p_list.add (food);
+				is_eaten = true;
+			} else {
+				is_eaten = false;
+			}
+			return is_eaten;
+		}
 		public void key_handle (Gdk.EventKey key) {
 			Direction direction_new;
 			switch (key.keyval) {

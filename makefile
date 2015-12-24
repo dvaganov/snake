@@ -5,7 +5,8 @@ HorizontalLine.vala \
 VerticalLine.vala \
 Figure.vala \
 Snake.vala \
-Direction.vala
+Direction.vala \
+FoodCreator.vala
 
 PKG = --pkg gtk+-3.0
 all: snake
