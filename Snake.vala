@@ -20,15 +20,28 @@ namespace Snake {
 		public bool eat_food (Point food) {
 			bool is_eaten;
 			var head = p_list[p_list.length - 1];
+			var tail = p_list[0];
 			if (head.is_match (food)) {
-				food.symb = head.symb;
-				food.move (1, direction);
-				p_list.add (food);
+				food.symb = tail.symb;
+				food.x = tail.x;
+				food.y = tail.y;
+				food.move (-1, direction);
+				p_list.insert (0, food);
 				is_eaten = true;
 			} else {
 				is_eaten = false;
 			}
 			return is_eaten;
+		}
+		public bool is_hit_fig (Figure fig) {
+			bool is_hit;
+			var head = p_list[p_list.length - 1];
+			if (fig.is_hit_point (head)) {
+				is_hit = true;
+			} else {
+				is_hit = false;
+			}
+			return is_hit;
 		}
 		public void key_handle (Gdk.EventKey key) {
 			Direction direction_new;
