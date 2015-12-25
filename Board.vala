@@ -26,12 +26,12 @@ namespace Snake {
 			});
 		}
 		private void draw_in_context (Cairo.Context cr) {
-				// Draw border
-				walls.draw (cr);
 				// Draw grid
 				if (grid_on) {
 					draw_grid (cr);
 				}
+				// Draw border
+				walls.draw (cr);
 				// Draw food
 				if (snake.eat_food (food)) {
 					food = food_creator.create ();
@@ -50,8 +50,8 @@ namespace Snake {
 		}
 		private void draw_grid (Cairo.Context cr) {
 			cr.save ();
-			cr.set_source_rgb (0.6, 0.6, 0.6);
-			cr.set_line_width (0.5);
+			cr.set_source_rgba (0.7, 0.7, 0.7, 0.5);
+			cr.set_line_width (1);
 			// Vertical grid
 			for (var i = 0; i < width_request / 10; i++) {
 				cr.move_to (10*i, 0);
