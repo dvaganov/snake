@@ -5,16 +5,22 @@ namespace Snake {
 		private FoodCreator food_creator;
 		private Point food;
 
+		public bool grid_on {set; get; default = true;}
+
 		public Board (double width, double height) {
+			width_request = (int) width;
+			height_request = (int) height;
+			expand = true;
+			halign = Gtk.Align.CENTER;
+			valign = Gtk.Align.CENTER;
+
 			snake = new Snake (new Point (40, 50, '*'), 4, Direction.RIGHT);
 			walls = new Walls (width, height);
 			food_creator = new FoodCreator (width, height, '$');
 
 			food = food_creator.create ();
 
-			this.expand = true;
 			this.draw.connect((cr) => {
-				cr.translate (0.5*(get_allocated_width () - width), 0.5*(get_allocated_height () - height));
 				draw_in_context (cr);
 				return true;
 			});
@@ -22,6 +28,10 @@ namespace Snake {
 		private void draw_in_context (Cairo.Context cr) {
 				// Draw border
 				walls.draw (cr);
+				// Draw grid
+				if (grid_on) {
+					draw_grid (cr);
+				}
 				// Draw food
 				if (snake.eat_food (food)) {
 					food = food_creator.create ();
@@ -37,6 +47,23 @@ namespace Snake {
 				if (snake.is_hit_fig (snake)) {
 					print ("game over\n");
 				}
+		}
+		private void draw_grid (Cairo.Context cr) {
+			cr.save ();
+			cr.set_source_rgb (0.6, 0.6, 0.6);
+			cr.set_line_width (0.5);
+			// Vertical grid
+			for (var i = 0; i < width_request / 10; i++) {
+				cr.move_to (10*i, 0);
+				cr.line_to (10*i, height_request);
+			}
+			// Horizontal grid
+			for (var i = 0; i < height_request / 10; i++) {
+				cr.move_to (0, 10*i);
+				cr.line_to (width_request, 10*i);
+			}
+			cr.stroke ();
+			cr.restore ();
 		}
 		public void key_handle (Gdk.EventKey key) {
 			snake.key_handle (key);
