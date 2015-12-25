@@ -1,9 +1,5 @@
 namespace Snake {
-	public class BodyPart : Object {
-		private int x;
-		private int y;
-		private int size;
-
+	public class BodyPart : Item {
 		private int padding {set; get; default = 1;}
 
 		public BodyPart (int x, int y, int size) {
@@ -16,7 +12,7 @@ namespace Snake {
 			y = part.y;
 			this.size = part.size;
 		}
-		public void draw (Cairo.Context cr) {
+		public override void draw (Cairo.Context cr) {
 			cr.save ();
 			cr.set_source_rgb (0.1, 0.1, 0.1);
 			cr.rectangle (x - 0.5*size + padding, y - 0.5*size + padding, size - 2*padding, size - 2*padding);

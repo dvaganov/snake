@@ -16,6 +16,7 @@ namespace Snake {
 				body.add (part);
 			}
 		}
+		public inline BodyPart get_head () {return body[body.length - 1];}
 		public void draw (Cairo.Context cr) {
 			for (var i = 0; i < body.length; i++) {
 				body[i].draw (cr);
@@ -23,36 +24,30 @@ namespace Snake {
 		}
 		public void move () {
 			body.remove_index (0);
-			var head = new BodyPart.copy (body[body.length - 1]);
+			var head = new BodyPart.copy (get_head ());
 			head.move (1, direction);
 			body.add (head);
 		}
-		/*public bool eat_food (Point food) {
-			bool is_eaten;
-			var head = p_list[p_list.length - 1];
-			var tail = p_list[0];
-			if (head.is_match (food)) {
-				food.symb = tail.symb;
-				food.x = tail.x;
-				food.y = tail.y;
-				food.move (-1, direction);
-				p_list.insert (0, food);
-				is_eaten = true;
+		public bool eat_food (Item food) {
+			var tail = body[0];
+			if (get_head ().is_match (food)) {
+				var new_part = new BodyPart.copy (tail);
+				tail.move (-1, direction);
+				body.insert (0, new_part);
+				return true;
 			} else {
-				is_eaten = false;
+				return false;
 			}
-			return is_eaten;
 		}
-		public bool is_hit_fig (Figure fig) {
-			bool is_hit;
-			var head = p_list[p_list.length - 1];
-			if (fig.is_hit_point (head)) {
-				is_hit = true;
-			} else {
-				is_hit = false;
+		public bool is_bite_self () {
+			var head = get_head ();
+			for (var i = 0; i < body.length - 1; i++) { //Excluding head itself
+				if (head.is_match (body[i])) {
+					return true;
+				}
 			}
-			return is_hit;
-		}*/
+			return false;
+		}
 		public void key_handle (Gdk.EventKey key) {
 			Direction direction_new;
 			switch (key.keyval) {

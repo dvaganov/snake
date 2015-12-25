@@ -2,9 +2,10 @@ namespace Snake {
 	public class Board : Gtk.DrawingArea {
 		private Snake snake;
 		private Walls walls;
-		//private FoodCreator food_creator;
-		//private Point food;
+		private FoodCreator food_creator;
+		private Point food;
 
+		public bool is_game {set; get; default = true;}
 		public bool grid_on {set; get; default = true;}
 
 		public Board (int width, int height) {
@@ -16,8 +17,8 @@ namespace Snake {
 
 			snake = new Snake (4, Direction.RIGHT);
 			walls = new Walls (width, height);
-			//food_creator = new FoodCreator (width, height, '$');
-			//food = food_creator.create ();
+			food_creator = new FoodCreator (width, height);
+			food = food_creator.create ();
 
 			this.draw.connect((cr) => {
 				draw_in_context (cr);
@@ -31,21 +32,23 @@ namespace Snake {
 				}
 				// Draw border
 				walls.draw (cr);
-				// Draw food
-				/*if (snake.eat_food (food)) {
-					food = food_creator.create ();
-				}
-				food.draw (cr);*/
 				// Draw snake
 				snake.draw (cr);
-				// Make it moves FIXME redraw only snake
-				snake.move ();
-				Thread.usleep (100000);
-				this.queue_draw ();
-				// Check hits
-				/*if (snake.is_hit_fig (snake)) {
-					print ("game over\n");
-				}*/
+				// Draw food
+				if (snake.eat_food (food)) {
+					food = food_creator.create ();
+				}
+				food.draw (cr);
+				if (is_game) {
+					// Make it moves FIXME redraw only snake
+					snake.move ();
+					Thread.usleep (150000);
+					this.queue_draw ();
+					// Check hits
+					if (snake.is_bite_self () || walls.is_hit (snake.get_head ())) {
+						is_game = false;
+					}
+				}
 		}
 		private void draw_grid (Cairo.Context cr) {
 			cr.save ();

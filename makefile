@@ -5,11 +5,9 @@ BodyPart.vala \
 Snake.vala \
 Direction.vala \
 Walls.vala \
-#Point.vala \
-#HorizontalLine.vala \
-#VerticalLine.vala \
-#Figure.vala \
-#FoodCreator.vala \
+Item.vala \
+FoodCreator.vala \
+Point.vala
 
 PKG = --pkg gtk+-3.0
 all: snake
