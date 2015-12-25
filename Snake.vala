@@ -1,23 +1,33 @@
 namespace Snake {
-	public class Snake : Figure {
+	public class Snake : Object {
 		private Direction direction;
+		private GenericArray<BodyPart?> body;
 
-		public Snake (Point tail, int length, Direction _direction) {
+		public Snake (int length, Direction _direction) {
 			direction = _direction;
-			p_list = new GenericArray<Point?> ();
+			body = new GenericArray<BodyPart?> ();
+			// Create tail
+			var part = new BodyPart (50, 50, 10);
+			body.add (part);
+			// Create body
 			for (var i = 0; i < length; i++) {
-				var p = new Point.copy (tail);
-				p.move (i, direction);
-				p_list.add (p);
+				part = new BodyPart.copy (body[0]);
+				part.move (i, direction);
+				body.add (part);
+			}
+		}
+		public void draw (Cairo.Context cr) {
+			for (var i = 0; i < body.length; i++) {
+				body[i].draw (cr);
 			}
 		}
 		public void move () {
-			p_list.remove_index (0);
-			var head = new Point.copy (p_list[p_list.length - 1]);
+			body.remove_index (0);
+			var head = new BodyPart.copy (body[body.length - 1]);
 			head.move (1, direction);
-			p_list.add (head);
+			body.add (head);
 		}
-		public bool eat_food (Point food) {
+		/*public bool eat_food (Point food) {
 			bool is_eaten;
 			var head = p_list[p_list.length - 1];
 			var tail = p_list[0];
@@ -42,7 +52,7 @@ namespace Snake {
 				is_hit = false;
 			}
 			return is_hit;
-		}
+		}*/
 		public void key_handle (Gdk.EventKey key) {
 			Direction direction_new;
 			switch (key.keyval) {

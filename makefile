@@ -1,14 +1,15 @@
 SRC = \
 Application.vala \
 Board.vala \
-Point.vala \
-HorizontalLine.vala \
-VerticalLine.vala \
-Figure.vala \
+BodyPart.vala \
 Snake.vala \
 Direction.vala \
-FoodCreator.vala \
-Walls.vala
+Walls.vala \
+#Point.vala \
+#HorizontalLine.vala \
+#VerticalLine.vala \
+#Figure.vala \
+#FoodCreator.vala \
 
 PKG = --pkg gtk+-3.0
 all: snake

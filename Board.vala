@@ -2,23 +2,22 @@ namespace Snake {
 	public class Board : Gtk.DrawingArea {
 		private Snake snake;
 		private Walls walls;
-		private FoodCreator food_creator;
-		private Point food;
+		//private FoodCreator food_creator;
+		//private Point food;
 
 		public bool grid_on {set; get; default = true;}
 
-		public Board (double width, double height) {
-			width_request = (int) width;
-			height_request = (int) height;
+		public Board (int width, int height) {
+			width_request = width;
+			height_request = height;
 			expand = true;
 			halign = Gtk.Align.CENTER;
 			valign = Gtk.Align.CENTER;
 
-			snake = new Snake (new Point (40, 50, '*'), 4, Direction.RIGHT);
+			snake = new Snake (4, Direction.RIGHT);
 			walls = new Walls (width, height);
-			food_creator = new FoodCreator (width, height, '$');
-
-			food = food_creator.create ();
+			//food_creator = new FoodCreator (width, height, '$');
+			//food = food_creator.create ();
 
 			this.draw.connect((cr) => {
 				draw_in_context (cr);
@@ -33,10 +32,10 @@ namespace Snake {
 				// Draw border
 				walls.draw (cr);
 				// Draw food
-				if (snake.eat_food (food)) {
+				/*if (snake.eat_food (food)) {
 					food = food_creator.create ();
 				}
-				food.draw (cr);
+				food.draw (cr);*/
 				// Draw snake
 				snake.draw (cr);
 				// Make it moves FIXME redraw only snake
@@ -44,9 +43,9 @@ namespace Snake {
 				Thread.usleep (100000);
 				this.queue_draw ();
 				// Check hits
-				if (snake.is_hit_fig (snake)) {
+				/*if (snake.is_hit_fig (snake)) {
 					print ("game over\n");
-				}
+				}*/
 		}
 		private void draw_grid (Cairo.Context cr) {
 			cr.save ();
