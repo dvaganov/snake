@@ -2,6 +2,8 @@ namespace Snake {
 	public class BodyPart : Item {
 		private int padding {set; get; default = 1;}
 
+		public bool is_eaten {set; get; default = false;}
+
 		public BodyPart (int x, int y, int size) {
 			this.x = x;
 			this.y = y;
@@ -14,7 +16,11 @@ namespace Snake {
 		}
 		public override void draw (Cairo.Context cr) {
 			cr.save ();
-			cr.set_source_rgb (0.1, 0.1, 0.1);
+			if (is_eaten) {
+				cr.set_source_rgb (0.1, 0.1, 0.7);
+			} else {
+				cr.set_source_rgb (0.1, 0.1, 0.1);
+			}
 			cr.rectangle (x - 0.5*size + padding, y - 0.5*size + padding, size - 2*padding, size - 2*padding);
 			cr.fill ();
 			cr.restore ();

@@ -26,34 +26,45 @@ namespace Snake {
 			});
 		}
 		private void draw_in_context (Cairo.Context cr) {
-				// Draw grid
-				if (grid_on) {
-					draw_grid (cr);
+			// Draw grid
+			if (grid_on) {
+				draw_grid (cr);
+			}
+			// Draw border
+			walls.draw (cr);
+			// Draw snake
+			snake.draw (cr);
+			// Draw food
+			if (snake.eat_food (food)) {
+				food = food_creator.create ();
+			}
+			food.draw (cr);
+			if (is_game) {
+				// Make it moves FIXME redraw only snake
+				snake.move ();
+				Thread.usleep (150000);
+				this.queue_draw ();
+				// Check hits
+				if (snake.is_bite_itself () || walls.is_hit (snake.get_head ())) {
+					is_game = false;
 				}
-				// Draw border
-				walls.draw (cr);
-				// Draw snake
-				snake.draw (cr);
-				// Draw food
-				if (snake.eat_food (food)) {
-					food = food_creator.create ();
-				}
-				food.draw (cr);
-				if (is_game) {
-					// Make it moves FIXME redraw only snake
-					snake.move ();
-					Thread.usleep (150000);
-					this.queue_draw ();
-					// Check hits
-					if (snake.is_bite_self () || walls.is_hit (snake.get_head ())) {
-						is_game = false;
-					}
-				}
+			} else {
+				cr.save ();
+				cr.set_source_rgb (0.1, 0.1, 0.1);
+				cr.select_font_face ("Adventure", Cairo.FontSlant.NORMAL, Cairo.FontWeight.BOLD);
+				cr.set_font_size (50);
+				cr.move_to (100, 250);
+				cr.show_text ("Game over");
+				cr.move_to (100, 300);
+				cr.show_text (@"Score is $(snake.score)");
+				cr.restore ();
+			}
 		}
 		private void draw_grid (Cairo.Context cr) {
 			cr.save ();
 			cr.set_source_rgba (0.7, 0.7, 0.7, 0.5);
 			cr.set_line_width (1);
+			cr.set_dash ({2,1}, 0);
 			// Vertical grid
 			for (var i = 0; i < width_request / 10; i++) {
 				cr.move_to (10*i, 0);

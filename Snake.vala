@@ -2,15 +2,19 @@ namespace Snake {
 	public class Snake : Object {
 		private Direction direction;
 		private GenericArray<BodyPart?> body;
+		private int initial_length;
+
+		public int score {get {return body.length - initial_length;}}
 
 		public Snake (int length, Direction _direction) {
 			direction = _direction;
+			initial_length = length;
 			body = new GenericArray<BodyPart?> ();
 			// Create tail
 			var part = new BodyPart (50, 50, 10);
 			body.add (part);
 			// Create body
-			for (var i = 0; i < length; i++) {
+			for (var i = 0; i < initial_length; i++) {
 				part = new BodyPart.copy (body[0]);
 				part.move (i, direction);
 				body.add (part);
@@ -31,15 +35,16 @@ namespace Snake {
 		public bool eat_food (Item food) {
 			var tail = body[0];
 			if (get_head ().is_match (food)) {
-				var new_part = new BodyPart.copy (tail);
-				tail.move (-1, direction);
-				body.insert (0, new_part);
+				body[body.length - 2].is_eaten = true;
+				var new_tail = new BodyPart.copy (tail);
+				new_tail.move (-1, direction);
+				body.insert (0, new_tail);
 				return true;
 			} else {
 				return false;
 			}
 		}
-		public bool is_bite_self () {
+		public bool is_bite_itself () {
 			var head = get_head ();
 			for (var i = 0; i < body.length - 1; i++) { //Excluding head itself
 				if (head.is_match (body[i])) {
