@@ -17,7 +17,7 @@ namespace Snake {
 		public override void draw (Cairo.Context cr) {
 			cr.save ();
 			if (is_eaten) {
-				cr.set_source_rgb (0.1, 0.1, 0.7);
+				cr.set_source_rgb (0.1, 0.5, 0.9);
 			} else {
 				cr.set_source_rgb (0.1, 0.1, 0.1);
 			}
@@ -41,14 +41,5 @@ namespace Snake {
 					break;
 			}
 		}
-		/*public bool is_match (Point p) {
-			bool is_match;
-			if (this.x == p.x && this.y == p.y) {
-				is_match = true;
-			} else {
-				is_match = false;
-			}
-			return is_match;
-		}*/
 	}
 }
