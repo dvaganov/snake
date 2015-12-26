@@ -21,6 +21,7 @@ namespace Snake {
 		private int padding {set; get; default = 1;}
 
 		public bool is_eaten {set; get; default = false;}
+		public bool is_head {set; get; default = false;}
 
 		public BodyPart (int x, int y, int size) {
 			this.x = x;
@@ -40,6 +41,11 @@ namespace Snake {
 				cr.set_source_rgb (0.1, 0.1, 0.1);
 			}
 			cr.rectangle (x - 0.5*size + padding, y - 0.5*size + padding, size - 2*padding, size - 2*padding);
+			if (is_head) {
+				cr.new_sub_path ();
+				cr.arc (x, y, 0.1*size, 0, 2*Math.PI);
+				cr.set_fill_rule (Cairo.FillRule.EVEN_ODD);
+			}
 			cr.fill ();
 			cr.restore ();
 		}

@@ -40,6 +40,8 @@ namespace Snake {
 		}
 		public inline BodyPart get_head () {return body[body.length - 1];}
 		public void draw (Cairo.Context cr) {
+			get_head ().is_head = true;
+			body[body.length - 2].is_head = false;
 			for (var i = 0; i < body.length; i++) {
 				body[i].draw (cr);
 			}
@@ -48,12 +50,13 @@ namespace Snake {
 			body.remove_index (0);
 			var head = new BodyPart.copy (get_head ());
 			head.move (1, direction);
+			head.is_head = true;
 			body.add (head);
 		}
 		public bool eat_food (Item food) {
 			var tail = body[0];
 			if (get_head ().is_match (food)) {
-				body[body.length - 2].is_eaten = true;
+				get_head ().is_eaten = true;
 				var new_tail = new BodyPart.copy (tail);
 				new_tail.move (-1, direction);
 				body.insert (0, new_tail);
