@@ -49,20 +49,33 @@ namespace Snake {
 			cr.fill ();
 			cr.restore ();
 		}
-		public void move (int offset, Direction dir) {
+		public void move (int offset, Direction dir, int? translate = null) {
 			int k = size;
 			if (dir == Direction.LEFT || dir == Direction.UP) {
 				k *= -1;
 			}
-			switch (dir) {
-				case Direction.RIGHT:
-				case Direction.LEFT:
-					x += k*offset;
-					break;
-				case Direction.UP:
-				case Direction.DOWN:
-					y += k*offset;
-					break;
+			if (translate == null) {
+				switch (dir) {
+					case Direction.RIGHT:
+					case Direction.LEFT:
+						x += k*offset;
+						break;
+					case Direction.UP:
+					case Direction.DOWN:
+						y += k*offset;
+						break;
+				}
+			} else {
+				switch (dir) {
+					case Direction.RIGHT:
+					case Direction.LEFT:
+						x = translate + k*offset;
+						break;
+					case Direction.UP:
+					case Direction.DOWN:
+						y = translate  + k*offset;
+						break;
+				}
 			}
 		}
 	}

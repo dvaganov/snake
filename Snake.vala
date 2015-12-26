@@ -21,12 +21,17 @@ namespace Snake {
 		private Direction direction;
 		private GenericArray<BodyPart?> body;
 		private int initial_length;
+		private int map_width;
+		private int map_height;
 
 		public int score {get {return body.length - initial_length;}}
 
-		public Snake (int length, Direction _direction) {
-			direction = _direction;
+		public Snake (int length, int map_width, int map_height) {
 			initial_length = length;
+			this.map_width = map_width;
+			this.map_height = map_height;
+
+			direction = Direction.RIGHT;
 			body = new GenericArray<BodyPart?> ();
 			// Create tail
 			var part = new BodyPart (50, 50, 10);
@@ -49,7 +54,17 @@ namespace Snake {
 		public void move () {
 			body.remove_index (0);
 			var head = new BodyPart.copy (get_head ());
-			head.move (1, direction);
+			if (head.cross_hline (0, map_width, 0)) {
+				head.move (1, direction, map_height);
+			} else if (head.cross_hline (0, map_width, map_height)) {
+				head.move (1, direction, 0);
+			} else if (head.cross_vline (0, 0, map_height)) {
+				head.move (1, direction, map_width);
+			} else if (head.cross_vline (map_width, 0, map_height)) {
+				head.move (1, direction, 0);
+			} else {
+				head.move (1, direction);
+			}
 			head.is_head = true;
 			body.add (head);
 		}

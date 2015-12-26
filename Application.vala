@@ -24,7 +24,6 @@ namespace Snake {
 		}
 		protected override void activate () {
 			var window = new Gtk.ApplicationWindow (this);
-			window.set_default_size (550, 550);
 			window.title = "Snake";
 
 			var header_bar = new Gtk.HeaderBar ();
@@ -35,26 +34,20 @@ namespace Snake {
 			var menu_btn = new Gtk.MenuButton ();
 			header_bar.pack_end (menu_btn);
 
-			var popover = new Gtk.Popover (menu_btn);
-			menu_btn.set_popover (popover);
-
 			var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-
-			//var results = new Gtk.Label ("");
-			//box.pack_start (results, false, false);
 
 			var game_board = new Board (400, 300);
 			game_board.on_score_change.connect ((score) => {
 				header_bar.subtitle = @"Score is $score";
 			});
-			popover.add (game_board.settings ());
+			//popover.add (game_board.settings ());
 			box.pack_start (game_board);
 
 			var btn = new Gtk.Button.with_label ("Start game");
 			btn.clicked.connect (() => {
 				game_board.start ();
 			});
-			box.pack_start (btn, false, false);
+			header_bar.pack_start (btn);
 
 			window.add (box);
 			window.key_press_event.connect ((key) => {
@@ -62,6 +55,16 @@ namespace Snake {
 				return false;
 			});
 			window.show_all ();
+
+			var prop_action = new PropertyAction ("has-grid", game_board, "has-grid");
+			window.add_action (prop_action);
+			prop_action = new PropertyAction ("has-walls", game_board, "has-walls");
+			window.add_action (prop_action);
+
+			var menu = new Menu ();
+			menu.append ("Grid", "win.has-grid");
+			menu.append ("Walls", "win.has-walls");
+			menu_btn.menu_model = menu;
 		}
 		public static int main(string[] args) {
 			var app = new Application ();

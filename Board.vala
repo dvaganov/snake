@@ -17,20 +17,39 @@
  */
 
 namespace Snake {
+	public enum Speed {
+		LOW = 100,
+		MEDIUM = 75,
+		HIGH = 50;
+		public string to_string () {
+			switch (this) {
+				case LOW: return "Low";
+				case MEDIUM: return "Medium";
+				case HIGH: return "High";
+				default: return "Unkonwn";
+			}
+		}
+	}
 	public class Board : Gtk.DrawingArea {
-		private const ushort LOW_SPEED = 100;
-		private const ushort MEDIUM_SPEED = 50;
-		private const ushort HEIGHT_SPEED = 25;
 		private Snake snake;
 		private Walls walls;
 		private FoodCreator food_creator;
 		private Point food;
-		private bool in_game;
+		private bool _has_grid;
+		private bool _has_walls;
+		private bool _in_game;
 		private int score;
-		private ushort speed;
 		private uint32 last_key_time;
 
-		public bool grid_on {set; get; default = true;}
+		public bool has_grid {
+			get {return _has_grid;}
+			set {_has_grid = value; queue_draw ();}
+		}
+		public bool has_walls {
+			get {return _has_walls;}
+			set {_has_walls = value; queue_draw ();}
+		}
+		public Speed speed {get; set; default = Speed.LOW;}
 
 		public signal void on_score_change (int score);
 
@@ -44,8 +63,9 @@ namespace Snake {
 
 			walls = new Walls (width, height);
 			food_creator = new FoodCreator (width, height);
-			in_game = false;
-			speed = LOW_SPEED;
+			_in_game = false;
+			_has_grid = true;
+			_has_walls = true;
 
 			this.draw.connect((cr) => {
 				draw_in_context (cr);
@@ -54,12 +74,14 @@ namespace Snake {
 		}
 		private void draw_in_context (Cairo.Context cr) {
 			// Draw grid
-			if (grid_on) {
+			if (has_grid) {
 				draw_grid (cr);
 			}
 			// Draw border
-			walls.draw (cr);
-			if (in_game) {
+			if (has_walls) {
+				walls.draw (cr);
+			}
+			if (_in_game) {
 				// Draw snake
 				snake.draw (cr);
 				// Draw food
@@ -69,14 +91,16 @@ namespace Snake {
 					on_score_change (score);
 				}
 				food.draw (cr);
+				// Check hits
+				if (snake.is_bite_itself ()) {
+					_in_game = false;
+				} else if (has_walls && walls.is_hit (snake.get_head ())) {
+					_in_game = false;
+				}
+				Thread.usleep (speed*1000);
 				// Make it moves FIXME redraw only snake
 				snake.move ();
 				queue_draw ();
-				// Check hits
-				if (snake.is_bite_itself () || walls.is_hit (snake.get_head ())) {
-					in_game = false;
-				}
-				Thread.usleep (speed*1000);
 			}
 		}
 		private void draw_grid (Cairo.Context cr) {
@@ -105,55 +129,12 @@ namespace Snake {
 			last_key_time = key.time;
 		}
 		public void start () {
-			snake = new Snake (4, Direction.RIGHT);
+			snake = new Snake (4, width_request, height_request);
 			food = food_creator.create ();
 			score = 0;
 			on_score_change (score);
-			in_game = true;
+			_in_game = true;
 			queue_draw ();
-		}
-		public Gtk.Box settings () {
-			var settings_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 5);
-			settings_box.margin = 15;
-
-			var label = new Gtk.Label ("Grid");
-			label.halign = Gtk.Align.START;
-			//label.margin_start = 15;
-			settings_box.pack_start (label);
-
-			var @switch = new Gtk.Switch (); // use chekbox
-			//@switch.halign = Gtk.Align.END;
-			//@switch.margin_end = 15;
-			@switch.active = grid_on;
-			@switch.notify["active"].connect (() => {
-				if (@switch.active) {
-					grid_on = true;
-				} else {
-					grid_on = false;
-				}
-				queue_draw ();
-			});
-			settings_box.pack_start (@switch);
-
-			var r_btn1 = new Gtk.RadioButton.with_label (null, "Low speed");
-			r_btn1.toggled.connect (() => {
-				speed = LOW_SPEED;
-			});
-			settings_box.pack_start (r_btn1);
-			var r_btn2 = new Gtk.RadioButton.with_label_from_widget (r_btn1, "Medium speed");
-			r_btn2.toggled.connect (() => {
-				speed = MEDIUM_SPEED;
-			});
-			settings_box.pack_start (r_btn2);
-			var r_btn3 = new Gtk.RadioButton.with_label_from_widget (r_btn1, "Height speed");
-			r_btn3.toggled.connect (() => {
-				speed = HEIGHT_SPEED;
-			});
-			settings_box.pack_start (r_btn3);
-
-			settings_box.show_all ();
-
-			return settings_box;
 		}
 	}
 }

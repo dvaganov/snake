@@ -30,5 +30,27 @@ namespace Snake {
 				return false;
 			}
 		}
+		public virtual bool cross_hline (int x0, int x1, int y) {
+			if (this.y == y) {
+				if (x >= x0 && x <= x1) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+		public virtual bool cross_vline (int x, int y0, int y1) {
+			if (this.x == x) {
+				if (y >= y0 && y <= y1) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
 	}
 }
